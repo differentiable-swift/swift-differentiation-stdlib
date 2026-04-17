@@ -1,7 +1,7 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 6.3 effective-5.10 (swiftlang-6.3.0.123.5 clang-2100.0.123.102)
-// swift-module-flags: -disable-objc-attr-requires-foundation-module -target arm64e-apple-ios16.0 -enable-objc-interop -enable-library-evolution -module-link-name swift_Differentiation -parse-stdlib -swift-version 5 -Onone -library-level api -enforce-exclusivity=unchecked -target-min-inlining-version min -enable-experimental-feature NoncopyableGenerics2 -enable-experimental-feature SuppressedAssociatedTypes -enable-experimental-feature SE427NoInferenceOnExtension -enable-experimental-feature NonescapableTypes -enable-experimental-feature LifetimeDependence -enable-experimental-feature InoutLifetimeDependence -enable-experimental-feature LifetimeDependenceMutableAccessors -enable-upcoming-feature MemberImportVisibility -module-name _Differentiation
-// swift-module-flags-ignorable: -enable-lexical-lifetimes=false -enable-ossa-modules -formal-cxx-interoperability-mode=off -interface-compiler-version 6.3
+// swift-compiler-version: Apple Swift version 6.2.4 (swift-6.2.4-RELEASE)
+// swift-module-flags: -disable-objc-attr-requires-foundation-module -target arm64e-apple-ios16.0 -enable-objc-interop -enable-library-evolution -module-link-name swift_Differentiation -parse-stdlib -swift-version 5 -O -library-level api -enforce-exclusivity=unchecked -target-min-inlining-version min -enable-experimental-feature NoncopyableGenerics2 -enable-experimental-feature SuppressedAssociatedTypes -enable-experimental-feature SE427NoInferenceOnExtension -enable-experimental-feature NonescapableTypes -enable-experimental-feature LifetimeDependence -enable-experimental-feature InoutLifetimeDependence -enable-experimental-feature LifetimeDependenceMutableAccessors -enable-upcoming-feature MemberImportVisibility -module-name _Differentiation
+// swift-module-flags-ignorable: -enable-lexical-lifetimes=false -enable-ossa-modules -formal-cxx-interoperability-mode=off -interface-compiler-version 6.2.4
 import Swift
 import SwiftShims
 import tgmath_h
@@ -146,7 +146,9 @@ internal protocol _AnyDerivativeBox {
   func _subtracting(_ x: any _Differentiation._AnyDerivativeBox) -> any _Differentiation._AnyDerivativeBox
   mutating func _move(by offset: any _Differentiation._AnyDerivativeBox)
   var _typeErasedBase: Any { get }
+  #if compiler(>=5.3) && $NonescapableTypes
   func _unboxed<U>(to type: U.Type) -> U? where U : _Differentiation.Differentiable, U == U.TangentVector
+  #endif
 }
 extension _Differentiation._AnyDerivativeBox {
   @inlinable internal func _isOpaqueZero() -> Swift.Bool {
@@ -165,9 +167,11 @@ extension _Differentiation._AnyDerivativeBox {
     return _base
   }
   }
+  #if compiler(>=5.3) && $NonescapableTypes
   @inlinable internal func _unboxed<U>(to type: U.Type) -> U? where U : _Differentiation.Differentiable, U == U.TangentVector {
     return (self as? _ConcreteDerivativeBox<U>)?._base
   }
+  #endif
   @inlinable internal func _isEqual(to other: any _Differentiation._AnyDerivativeBox) -> Swift.Bool {
     return _base == other._unboxed(to: T.self)
   }
@@ -614,6 +618,7 @@ extension Swift.Array where Element : _Differentiation.Differentiable {
     })
   }
 }
+#if compiler(>=5.3) && $NonescapableTypes
 extension Swift.Optional : _Differentiation.Differentiable where Wrapped : _Differentiation.Differentiable {
   @frozen public struct TangentVector : _Differentiation.Differentiable, Swift.AdditiveArithmetic {
     public typealias TangentVector = Swift.Optional<Wrapped>.TangentVector
@@ -655,6 +660,7 @@ extension Swift.Optional : _Differentiation.Differentiable where Wrapped : _Diff
     }
   }
 }
+#endif
 extension Swift.Optional.TangentVector : Swift.CustomReflectable {
   public var customMirror: Swift.Mirror {
     get
