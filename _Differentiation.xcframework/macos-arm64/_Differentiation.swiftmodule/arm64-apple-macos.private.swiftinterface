@@ -1,7 +1,7 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 6.3 effective-5.10 (swiftlang-6.3.0.123.5 clang-2100.0.123.102)
-// swift-module-flags: -target arm64-apple-macos26.0 -enable-objc-interop -enable-library-evolution -module-link-name swift_Differentiation -parse-stdlib -static -swift-version 5 -O -library-level api -enforce-exclusivity=unchecked -target-min-inlining-version min -enable-experimental-feature NoncopyableGenerics2 -enable-experimental-feature SuppressedAssociatedTypes -enable-experimental-feature SE427NoInferenceOnExtension -enable-experimental-feature NonescapableTypes -enable-experimental-feature LifetimeDependence -enable-experimental-feature MemberImportVisibility -module-name _Differentiation
-// swift-module-flags-ignorable:  -formal-cxx-interoperability-mode=off -interface-compiler-version 6.3
+// swift-compiler-version: Apple Swift version 6.3.2 (swift-6.3.2-RELEASE)
+// swift-module-flags: -target arm64-apple-macos13.0 -enable-objc-interop -enable-library-evolution -module-link-name lib_Differentiation -parse-stdlib -swift-version 5 -O -library-level api -enforce-exclusivity=unchecked -target-min-inlining-version min -enable-experimental-feature NoncopyableGenerics2 -enable-experimental-feature SuppressedAssociatedTypes -enable-experimental-feature SE427NoInferenceOnExtension -enable-experimental-feature NonescapableTypes -enable-experimental-feature LifetimeDependence -enable-experimental-feature MemberImportVisibility -module-name _Differentiation
+// swift-module-flags-ignorable:  -formal-cxx-interoperability-mode=off -interface-compiler-version 6.3.2
 import Swift
 import SwiftShims
 import tgmath_h
@@ -525,6 +525,15 @@ extension _Differentiation.Differentiable where Self == Self.TangentVector {
 @inlinable public func valueWithDifferential<T, U, V, R>(at x: T, _ y: U, _ z: V, of f: @differentiable(reverse) (T, U, V) -> R) -> (value: R, differential: (T.TangentVector, U.TangentVector, V.TangentVector) -> R.TangentVector) where T : _Differentiation.Differentiable, U : _Differentiation.Differentiable, V : _Differentiation.Differentiable, R : _Differentiation.Differentiable {
   return Builtin.applyDerivative_jvp_arity3(f, x, y, z)
 }
+@inlinable public func valueWithDifferential<T, R, E>(at x: T, of f: @differentiable(reverse) (T) throws(E) -> R) throws(E) -> (value: R, differential: (T.TangentVector) -> R.TangentVector) where T : _Differentiation.Differentiable, R : _Differentiation.Differentiable, E : Swift.Error {
+  return try Builtin.applyDerivative_jvp_throws(f, x)
+}
+@inlinable public func valueWithDifferential<T, U, R, E>(at x: T, _ y: U, of f: @differentiable(reverse) (T, U) throws(E) -> R) throws(E) -> (value: R, differential: (T.TangentVector, U.TangentVector) -> R.TangentVector) where T : _Differentiation.Differentiable, U : _Differentiation.Differentiable, R : _Differentiation.Differentiable, E : Swift.Error {
+  return try Builtin.applyDerivative_jvp_arity2_throws(f, x, y)
+}
+@inlinable public func valueWithDifferential<T, U, V, R, E>(at x: T, _ y: U, _ z: V, of f: @differentiable(reverse) (T, U, V) throws(E) -> R) throws(E) -> (value: R, differential: (T.TangentVector, U.TangentVector, V.TangentVector) -> R.TangentVector) where T : _Differentiation.Differentiable, U : _Differentiation.Differentiable, V : _Differentiation.Differentiable, R : _Differentiation.Differentiable, E : Swift.Error {
+  return try Builtin.applyDerivative_jvp_arity3_throws(f, x, y, z)
+}
 @inlinable public func valueWithPullback<T, R>(at x: T, of f: @differentiable(reverse) (T) -> R) -> (value: R, pullback: (R.TangentVector) -> T.TangentVector) where T : _Differentiation.Differentiable, R : _Differentiation.Differentiable {
   return Builtin.applyDerivative_vjp(f, x)
 }
@@ -533,6 +542,15 @@ extension _Differentiation.Differentiable where Self == Self.TangentVector {
 }
 @inlinable public func valueWithPullback<T, U, V, R>(at x: T, _ y: U, _ z: V, of f: @differentiable(reverse) (T, U, V) -> R) -> (value: R, pullback: (R.TangentVector) -> (T.TangentVector, U.TangentVector, V.TangentVector)) where T : _Differentiation.Differentiable, U : _Differentiation.Differentiable, V : _Differentiation.Differentiable, R : _Differentiation.Differentiable {
   return Builtin.applyDerivative_vjp_arity3(f, x, y, z)
+}
+@inlinable public func valueWithPullback<T, R, E>(at x: T, of f: @differentiable(reverse) (T) throws(E) -> R) throws(E) -> (value: R, pullback: (R.TangentVector) -> T.TangentVector) where T : _Differentiation.Differentiable, R : _Differentiation.Differentiable, E : Swift.Error {
+  return try Builtin.applyDerivative_vjp_throws(f, x)
+}
+@inlinable public func valueWithPullback<T, U, R, E>(at x: T, _ y: U, of f: @differentiable(reverse) (T, U) throws(E) -> R) throws(E) -> (value: R, pullback: (R.TangentVector) -> (T.TangentVector, U.TangentVector)) where T : _Differentiation.Differentiable, U : _Differentiation.Differentiable, R : _Differentiation.Differentiable, E : Swift.Error {
+  return try Builtin.applyDerivative_vjp_arity2_throws(f, x, y)
+}
+@inlinable public func valueWithPullback<T, U, V, R, E>(at x: T, _ y: U, _ z: V, of f: @differentiable(reverse) (T, U, V) throws(E) -> R) throws(E) -> (value: R, pullback: (R.TangentVector) -> (T.TangentVector, U.TangentVector, V.TangentVector)) where T : _Differentiation.Differentiable, U : _Differentiation.Differentiable, V : _Differentiation.Differentiable, R : _Differentiation.Differentiable, E : Swift.Error {
+  return try Builtin.applyDerivative_vjp_arity3_throws(f, x, y, z)
 }
 @inlinable public func differential<T, R>(at x: T, of f: @differentiable(reverse) (T) -> R) -> (T.TangentVector) -> R.TangentVector where T : _Differentiation.Differentiable, R : _Differentiation.Differentiable {
   return valueWithDifferential(at: x, of: f).1
@@ -543,6 +561,15 @@ extension _Differentiation.Differentiable where Self == Self.TangentVector {
 @inlinable public func differential<T, U, V, R>(at x: T, _ y: U, _ z: V, of f: @differentiable(reverse) (T, U, V) -> R) -> (T.TangentVector, U.TangentVector, V.TangentVector) -> R.TangentVector where T : _Differentiation.Differentiable, U : _Differentiation.Differentiable, V : _Differentiation.Differentiable, R : _Differentiation.Differentiable {
   return valueWithDifferential(at: x, y, z, of: f).1
 }
+@inlinable public func differential<T, R, E>(at x: T, of f: @differentiable(reverse) (T) throws(E) -> R) throws(E) -> (T.TangentVector) -> R.TangentVector where T : _Differentiation.Differentiable, R : _Differentiation.Differentiable, E : Swift.Error {
+  return try valueWithDifferential(at: x, of: f).1
+}
+@inlinable public func differential<T, U, R, E>(at x: T, _ y: U, of f: @differentiable(reverse) (T, U) throws(E) -> R) throws(E) -> (T.TangentVector, U.TangentVector) -> R.TangentVector where T : _Differentiation.Differentiable, U : _Differentiation.Differentiable, R : _Differentiation.Differentiable, E : Swift.Error {
+  return try valueWithDifferential(at: x, y, of: f).1
+}
+@inlinable public func differential<T, U, V, R, E>(at x: T, _ y: U, _ z: V, of f: @differentiable(reverse) (T, U, V) throws(E) -> R) throws(E) -> (T.TangentVector, U.TangentVector, V.TangentVector) -> R.TangentVector where T : _Differentiation.Differentiable, U : _Differentiation.Differentiable, V : _Differentiation.Differentiable, R : _Differentiation.Differentiable, E : Swift.Error {
+  return try valueWithDifferential(at: x, y, z, of: f).1
+}
 @inlinable public func pullback<T, R>(at x: T, of f: @differentiable(reverse) (T) -> R) -> (R.TangentVector) -> T.TangentVector where T : _Differentiation.Differentiable, R : _Differentiation.Differentiable {
   return Builtin.applyDerivative_vjp(f, x).1
 }
@@ -551,6 +578,15 @@ extension _Differentiation.Differentiable where Self == Self.TangentVector {
 }
 @inlinable public func pullback<T, U, V, R>(at x: T, _ y: U, _ z: V, of f: @differentiable(reverse) (T, U, V) -> R) -> (R.TangentVector) -> (T.TangentVector, U.TangentVector, V.TangentVector) where T : _Differentiation.Differentiable, U : _Differentiation.Differentiable, V : _Differentiation.Differentiable, R : _Differentiation.Differentiable {
   return Builtin.applyDerivative_vjp_arity3(f, x, y, z).1
+}
+@inlinable public func pullback<T, R, E>(at x: T, of f: @differentiable(reverse) (T) throws(E) -> R) throws(E) -> (R.TangentVector) -> T.TangentVector where T : _Differentiation.Differentiable, R : _Differentiation.Differentiable, E : Swift.Error {
+  return try Builtin.applyDerivative_vjp_throws(f, x).1
+}
+@inlinable public func pullback<T, U, R, E>(at x: T, _ y: U, of f: @differentiable(reverse) (T, U) throws(E) -> R) throws(E) -> (R.TangentVector) -> (T.TangentVector, U.TangentVector) where T : _Differentiation.Differentiable, U : _Differentiation.Differentiable, R : _Differentiation.Differentiable, E : Swift.Error {
+  return try Builtin.applyDerivative_vjp_arity2_throws(f, x, y).1
+}
+@inlinable public func pullback<T, U, V, R, E>(at x: T, _ y: U, _ z: V, of f: @differentiable(reverse) (T, U, V) throws(E) -> R) throws(E) -> (R.TangentVector) -> (T.TangentVector, U.TangentVector, V.TangentVector) where T : _Differentiation.Differentiable, U : _Differentiation.Differentiable, V : _Differentiation.Differentiable, R : _Differentiation.Differentiable, E : Swift.Error {
+  return try Builtin.applyDerivative_vjp_arity3_throws(f, x, y, z).1
 }
 @inlinable public func derivative<T, R>(at x: T, of f: @differentiable(reverse) (T) -> R) -> R.TangentVector where T : Swift.FloatingPoint, T : _Differentiation.Differentiable, T == T.TangentVector, R : _Differentiation.Differentiable {
   return differential(at: x, of: f)(T(1))
@@ -561,6 +597,15 @@ extension _Differentiation.Differentiable where Self == Self.TangentVector {
 @inlinable public func derivative<T, U, V, R>(at x: T, _ y: U, _ z: V, of f: @differentiable(reverse) (T, U, V) -> R) -> R.TangentVector where T : Swift.FloatingPoint, T : _Differentiation.Differentiable, T == T.TangentVector, U : Swift.FloatingPoint, U : _Differentiation.Differentiable, U == U.TangentVector, V : Swift.FloatingPoint, V : _Differentiation.Differentiable, V == V.TangentVector, R : _Differentiation.Differentiable {
   return differential(at: x, y, z, of: f)(T(1), U(1), V(1))
 }
+@inlinable public func derivative<T, R, E>(at x: T, of f: @differentiable(reverse) (T) throws(E) -> R) throws(E) -> R.TangentVector where T : Swift.FloatingPoint, T : _Differentiation.Differentiable, T == T.TangentVector, R : _Differentiation.Differentiable, E : Swift.Error {
+  return try differential(at: x, of: f)(T(1))
+}
+@inlinable public func derivative<T, U, R, E>(at x: T, _ y: U, of f: @differentiable(reverse) (T, U) throws(E) -> R) throws(E) -> R.TangentVector where T : Swift.FloatingPoint, T : _Differentiation.Differentiable, T == T.TangentVector, U : Swift.FloatingPoint, U : _Differentiation.Differentiable, U == U.TangentVector, R : _Differentiation.Differentiable, E : Swift.Error {
+  return try differential(at: x, y, of: f)(T(1), U(1))
+}
+@inlinable public func derivative<T, U, V, R, E>(at x: T, _ y: U, _ z: V, of f: @differentiable(reverse) (T, U, V) throws(E) -> R) throws(E) -> R.TangentVector where T : Swift.FloatingPoint, T : _Differentiation.Differentiable, T == T.TangentVector, U : Swift.FloatingPoint, U : _Differentiation.Differentiable, U == U.TangentVector, V : Swift.FloatingPoint, V : _Differentiation.Differentiable, V == V.TangentVector, R : _Differentiation.Differentiable, E : Swift.Error {
+  return try differential(at: x, y, z, of: f)(T(1), U(1), V(1))
+}
 @inlinable public func gradient<T, R>(at x: T, of f: @differentiable(reverse) (T) -> R) -> T.TangentVector where T : _Differentiation.Differentiable, R : Swift.FloatingPoint, R : _Differentiation.Differentiable, R == R.TangentVector {
   return pullback(at: x, of: f)(R(1))
 }
@@ -569,6 +614,15 @@ extension _Differentiation.Differentiable where Self == Self.TangentVector {
 }
 @inlinable public func gradient<T, U, V, R>(at x: T, _ y: U, _ z: V, of f: @differentiable(reverse) (T, U, V) -> R) -> (T.TangentVector, U.TangentVector, V.TangentVector) where T : _Differentiation.Differentiable, U : _Differentiation.Differentiable, V : _Differentiation.Differentiable, R : Swift.FloatingPoint, R : _Differentiation.Differentiable, R == R.TangentVector {
   return pullback(at: x, y, z, of: f)(R(1))
+}
+@inlinable public func gradient<T, R, E>(at x: T, of f: @differentiable(reverse) (T) throws(E) -> R) throws(E) -> T.TangentVector where T : _Differentiation.Differentiable, R : Swift.FloatingPoint, R : _Differentiation.Differentiable, R == R.TangentVector, E : Swift.Error {
+  return try pullback(at: x, of: f)(R(1))
+}
+@inlinable public func gradient<T, U, R, E>(at x: T, _ y: U, of f: @differentiable(reverse) (T, U) throws(E) -> R) throws(E) -> (T.TangentVector, U.TangentVector) where T : _Differentiation.Differentiable, U : _Differentiation.Differentiable, R : Swift.FloatingPoint, R : _Differentiation.Differentiable, R == R.TangentVector, E : Swift.Error {
+  return try pullback(at: x, y, of: f)(R(1))
+}
+@inlinable public func gradient<T, U, V, R, E>(at x: T, _ y: U, _ z: V, of f: @differentiable(reverse) (T, U, V) throws(E) -> R) throws(E) -> (T.TangentVector, U.TangentVector, V.TangentVector) where T : _Differentiation.Differentiable, U : _Differentiation.Differentiable, V : _Differentiation.Differentiable, R : Swift.FloatingPoint, R : _Differentiation.Differentiable, R == R.TangentVector, E : Swift.Error {
+  return try pullback(at: x, y, z, of: f)(R(1))
 }
 @inlinable public func valueWithDerivative<T, R>(at x: T, of f: @escaping @differentiable(reverse) (T) -> R) -> (value: R, derivative: R.TangentVector) where T : Swift.FloatingPoint, T : _Differentiation.Differentiable, T == T.TangentVector, R : _Differentiation.Differentiable {
   let (y, differential) = valueWithDifferential(at: x, of: f)
@@ -580,6 +634,18 @@ extension _Differentiation.Differentiable where Self == Self.TangentVector {
 }
 @inlinable public func valueWithDerivative<T, U, V, R>(at x: T, _ y: U, _ z: V, of f: @escaping @differentiable(reverse) (T, U, V) -> R) -> (value: R, derivative: R.TangentVector) where T : Swift.FloatingPoint, T : _Differentiation.Differentiable, T == T.TangentVector, U : Swift.FloatingPoint, U : _Differentiation.Differentiable, U == U.TangentVector, V : Swift.FloatingPoint, V : _Differentiation.Differentiable, V == V.TangentVector, R : _Differentiation.Differentiable {
   let (y, differential) = valueWithDifferential(at: x, y, z, of: f)
+  return (y, differential(T(1), U(1), V(1)))
+}
+@inlinable public func valueWithDerivative<T, R, E>(at x: T, of f: @escaping @differentiable(reverse) (T) throws(E) -> R) throws(E) -> (value: R, derivative: R.TangentVector) where T : Swift.FloatingPoint, T : _Differentiation.Differentiable, T == T.TangentVector, R : _Differentiation.Differentiable, E : Swift.Error {
+  let (y, differential) = try valueWithDifferential(at: x, of: f)
+  return (y, differential(T(1)))
+}
+@inlinable public func valueWithDerivative<T, U, R, E>(at x: T, _ y: U, of f: @escaping @differentiable(reverse) (T, U) throws(E) -> R) throws(E) -> (value: R, derivative: R.TangentVector) where T : Swift.FloatingPoint, T : _Differentiation.Differentiable, T == T.TangentVector, U : Swift.FloatingPoint, U : _Differentiation.Differentiable, U == U.TangentVector, R : _Differentiation.Differentiable, E : Swift.Error {
+  let (y, differential) = try valueWithDifferential(at: x, y, of: f)
+  return (y, differential(T(1), U(1)))
+}
+@inlinable public func valueWithDerivative<T, U, V, R, E>(at x: T, _ y: U, _ z: V, of f: @escaping @differentiable(reverse) (T, U, V) throws(E) -> R) throws(E) -> (value: R, derivative: R.TangentVector) where T : Swift.FloatingPoint, T : _Differentiation.Differentiable, T == T.TangentVector, U : Swift.FloatingPoint, U : _Differentiation.Differentiable, U == U.TangentVector, V : Swift.FloatingPoint, V : _Differentiation.Differentiable, V == V.TangentVector, R : _Differentiation.Differentiable, E : Swift.Error {
+  let (y, differential) = try valueWithDifferential(at: x, y, z, of: f)
   return (y, differential(T(1), U(1), V(1)))
 }
 @inlinable public func valueWithGradient<T, R>(at x: T, of f: @differentiable(reverse) (T) -> R) -> (value: R, gradient: T.TangentVector) where T : _Differentiation.Differentiable, R : Swift.FloatingPoint, R : _Differentiation.Differentiable, R == R.TangentVector {
@@ -594,6 +660,18 @@ extension _Differentiation.Differentiable where Self == Self.TangentVector {
   let (y, pullback) = valueWithPullback(at: x, y, z, of: f)
   return (y, pullback(R(1)))
 }
+@inlinable public func valueWithGradient<T, R, E>(at x: T, of f: @differentiable(reverse) (T) throws(E) -> R) throws(E) -> (value: R, gradient: T.TangentVector) where T : _Differentiation.Differentiable, R : Swift.FloatingPoint, R : _Differentiation.Differentiable, R == R.TangentVector, E : Swift.Error {
+  let (y, pullback) = try valueWithPullback(at: x, of: f)
+  return (y, pullback(R(1)))
+}
+@inlinable public func valueWithGradient<T, U, R, E>(at x: T, _ y: U, of f: @differentiable(reverse) (T, U) throws(E) -> R) throws(E) -> (value: R, gradient: (T.TangentVector, U.TangentVector)) where T : _Differentiation.Differentiable, U : _Differentiation.Differentiable, R : Swift.FloatingPoint, R : _Differentiation.Differentiable, R == R.TangentVector, E : Swift.Error {
+  let (y, pullback) = try valueWithPullback(at: x, y, of: f)
+  return (y, pullback(R(1)))
+}
+@inlinable public func valueWithGradient<T, U, V, R, E>(at x: T, _ y: U, _ z: V, of f: @differentiable(reverse) (T, U, V) throws(E) -> R) throws(E) -> (value: R, gradient: (T.TangentVector, U.TangentVector, V.TangentVector)) where T : _Differentiation.Differentiable, U : _Differentiation.Differentiable, V : _Differentiation.Differentiable, R : Swift.FloatingPoint, R : _Differentiation.Differentiable, R == R.TangentVector, E : Swift.Error {
+  let (y, pullback) = try valueWithPullback(at: x, y, z, of: f)
+  return (y, pullback(R(1)))
+}
 @inlinable public func derivative<T, R>(of f: @escaping @differentiable(reverse) (T) -> R) -> (T) -> R.TangentVector where T : Swift.FloatingPoint, T : _Differentiation.Differentiable, T == T.TangentVector, R : _Differentiation.Differentiable {
   return { x in derivative(at: x, of: f) }
 }
@@ -603,6 +681,15 @@ extension _Differentiation.Differentiable where Self == Self.TangentVector {
 @inlinable public func derivative<T, U, V, R>(of f: @escaping @differentiable(reverse) (T, U, V) -> R) -> (T, U, V) -> R.TangentVector where T : Swift.FloatingPoint, T : _Differentiation.Differentiable, T == T.TangentVector, U : Swift.FloatingPoint, U : _Differentiation.Differentiable, U == U.TangentVector, V : Swift.FloatingPoint, V : _Differentiation.Differentiable, V == V.TangentVector, R : _Differentiation.Differentiable {
   return { (x, y, z) in derivative(at: x, y, z, of: f) }
 }
+@inlinable public func derivative<T, R, E>(of f: @escaping @differentiable(reverse) (T) throws(E) -> R) -> (T) throws(E) -> R.TangentVector where T : Swift.FloatingPoint, T : _Differentiation.Differentiable, T == T.TangentVector, R : _Differentiation.Differentiable, E : Swift.Error {
+  return { x in try derivative(at: x, of: f) }
+}
+@inlinable public func derivative<T, U, R, E>(of f: @escaping @differentiable(reverse) (T, U) throws(E) -> R) -> (T, U) throws(E) -> R.TangentVector where T : Swift.FloatingPoint, T : _Differentiation.Differentiable, T == T.TangentVector, U : Swift.FloatingPoint, U : _Differentiation.Differentiable, U == U.TangentVector, R : _Differentiation.Differentiable, E : Swift.Error {
+  return { (x, y) in try derivative(at: x, y, of: f) }
+}
+@inlinable public func derivative<T, U, V, R, E>(of f: @escaping @differentiable(reverse) (T, U, V) throws(E) -> R) -> (T, U, V) throws(E) -> R.TangentVector where T : Swift.FloatingPoint, T : _Differentiation.Differentiable, T == T.TangentVector, U : Swift.FloatingPoint, U : _Differentiation.Differentiable, U == U.TangentVector, V : Swift.FloatingPoint, V : _Differentiation.Differentiable, V == V.TangentVector, R : _Differentiation.Differentiable, E : Swift.Error {
+  return { (x, y, z) in try derivative(at: x, y, z, of: f) }
+}
 @inlinable public func gradient<T, R>(of f: @escaping @differentiable(reverse) (T) -> R) -> (T) -> T.TangentVector where T : _Differentiation.Differentiable, R : Swift.FloatingPoint, R : _Differentiation.Differentiable, R == R.TangentVector {
   return { x in gradient(at: x, of: f) }
 }
@@ -611,6 +698,15 @@ extension _Differentiation.Differentiable where Self == Self.TangentVector {
 }
 @inlinable public func gradient<T, U, V, R>(of f: @escaping @differentiable(reverse) (T, U, V) -> R) -> (T, U, V) -> (T.TangentVector, U.TangentVector, V.TangentVector) where T : _Differentiation.Differentiable, U : _Differentiation.Differentiable, V : _Differentiation.Differentiable, R : Swift.FloatingPoint, R : _Differentiation.Differentiable, R == R.TangentVector {
   return { x, y, z in gradient(at: x, y, z, of: f) }
+}
+@inlinable public func gradient<T, R, E>(of f: @escaping @differentiable(reverse) (T) throws(E) -> R) -> (T) throws(E) -> T.TangentVector where T : _Differentiation.Differentiable, R : Swift.FloatingPoint, R : _Differentiation.Differentiable, R == R.TangentVector, E : Swift.Error {
+  return { x in try gradient(at: x, of: f) }
+}
+@inlinable public func gradient<T, U, R, E>(of f: @escaping @differentiable(reverse) (T, U) throws(E) -> R) -> (T, U) throws(E) -> (T.TangentVector, U.TangentVector) where T : _Differentiation.Differentiable, U : _Differentiation.Differentiable, R : Swift.FloatingPoint, R : _Differentiation.Differentiable, R == R.TangentVector, E : Swift.Error {
+  return { x, y in try gradient(at: x, y, of: f) }
+}
+@inlinable public func gradient<T, U, V, R, E>(of f: @escaping @differentiable(reverse) (T, U, V) throws(E) -> R) -> (T, U, V) throws(E) -> (T.TangentVector, U.TangentVector, V.TangentVector) where T : _Differentiation.Differentiable, U : _Differentiation.Differentiable, V : _Differentiation.Differentiable, R : Swift.FloatingPoint, R : _Differentiation.Differentiable, R == R.TangentVector, E : Swift.Error {
+  return { x, y, z in try gradient(at: x, y, z, of: f) }
 }
 @inlinable @inline(__always) @_semantics("autodiff.nonvarying") public func withoutDerivative<T>(at x: T) -> T {
   x
