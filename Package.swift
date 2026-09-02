@@ -26,8 +26,8 @@ let package = Package(
         // in the consuming package.
         .binaryTarget(
             name: "_Differentiation",
-            url: "https://github.com/differentiable-swift/swift-differentiation-stdlib/releases/download/0.0.0/_Differentiation.xcframework.zip",
-            checksum: "0000000000000000000000000000000000000000000000000000000000000000"
+            url: "https://github.com/differentiable-swift/swift-differentiation-stdlib/releases/download/604.0.0-prerelease-4/_Differentiation-swift-6.4.x-DEVELOPMENT-SNAPSHOT-2026-08-28-a.xcframework.zip",
+            checksum: "25310d20bf35b0d25c2905a7dd3a037aa357ec1ded200e545e7e42824426dc2e"
         ),
         .testTarget(
             name: "DifferentiationTests",
