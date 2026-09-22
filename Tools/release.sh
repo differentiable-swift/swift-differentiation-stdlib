@@ -266,7 +266,7 @@ publish() {
     --repo "$repository" \
     --title "$package_version" \
     --notes "Built from swiftlang/swift at \`${swift_version}\`." \
-    "${release_flags[@]}"; then
+    ${release_flags[@]+"${release_flags[@]}"}; then
     # The tag and commit are already public at this point, so this can no
     # longer be undone by resetting local git state -- keep the zip so the
     # release can be finished by hand without rebuilding.
